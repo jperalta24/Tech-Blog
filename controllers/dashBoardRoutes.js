@@ -1,9 +1,60 @@
-const router = require('express').Router();
-
-
+const router = require("express").Router();
+const { User, Post, Comment } = require("../models");
+const withAuth = require("../utils/auth");
 //All user posts ('/dashboard')
 
+router.get("/dashboard", withAuth, async (req, res) => {
+  try {
+    // Fetch all posts for the logged-in user
+    const postData = await Post.findAll({
+      where: { userId: req.session.userId },
+      include: [{ model: User, attributes: ["username"] }],
+    });
+
+    // Serialize the data
+    const posts = postData.map((post) => post.get({ plain: true }));
+
+    // Render the dashboard template with the serialized data and session status
+    res.render("dashboard", { posts, loggedIn: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 // Get one post to edit ('dashboard/edit/:id')
+router.get("/dashboard/edit/:id", withAuth, async (req, res) => {
+  try {
+    // Fetch the post to be edited
+    const postData = await Post.findOne({
+      where: { id: req.params.id, userId: req.session.userId },
+      include: [{ model: User, attributes: ["username"] }],
+    });
+
+    // If the post does not exist, return a 404 error
+    if (!postData) {
+      res.status(404).json({ message: "Post not found" });
+      return;
+    }
+
+    // Serialize the data
+    const post = postData.get({ plain: true });
+
+    // Render the edit-post template with the serialized data and session status
+    res.render("editPost", { post, loggedIn: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+router.get("/new", withAuth, async (req, res) => {
+  try {
+    res.render("new-post", { username: req.session.username });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;

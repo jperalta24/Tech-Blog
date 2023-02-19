@@ -8,14 +8,14 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: Comment,
-          attributes: ["content", "created_at"],
+          attributes: ["content", "createdAt"],
         },
         {
           model: User,
           attributes: ["username"],
         },
       ],
-      order: [["created_at", "DESC"]],
+      order: [["createdAt", "DESC"]],
     });
 
     const posts = postData.map((post) => post.get({ plain: true }));
@@ -37,7 +37,7 @@ router.get("/posts/:id", async (req, res) => {
       include: [
         {
           model: Comment,
-          attributes: ["content", "created_at"],
+          attributes: ["content", "createdAt"],
           include: {
             model: User,
             attributes: ["username"],
@@ -65,16 +65,24 @@ router.get("/posts/:id", async (req, res) => {
   }
 });
 
-router.get("login", (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect("/");
-    return;
+router.get("/login", async (req, res) => {
+  try {
+    if (req.session.loggedIn) {
+      res.redirect("/");
+      return;
+    }
+    res.render("login");
+  } catch (err) {
+    res.status(500).json(err);
   }
-  res.render("login");
 });
 
-router.get("signup", (req, res) => {
-  res.render("signup");
+router.get("/signup", async (req, res) => {
+  try {
+    res.render("signup");
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
