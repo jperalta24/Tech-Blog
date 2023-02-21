@@ -50,7 +50,7 @@ router.get("/dashboard/edit/:id", withAuth, async (req, res) => {
 
 router.get("/new", withAuth, async (req, res) => {
   try {
-    res.render("new-post", { username: req.session.username });
+    res.render("newPost", { username: req.session.username });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
