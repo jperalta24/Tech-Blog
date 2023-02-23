@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User, Post, Comment } = require("../models");
-const withAuth = require("../utils/auth");
+const withAuth = require("../../utils/auth");
 
 // create a new post
 router.post("/", withAuth, async (req, res) => {
@@ -33,6 +33,21 @@ router.put("/:id", withAuth, async (req, res) => {
       res.status(404).json({ message: "This id is has not post" });
       return;
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//delete a post
+router.delete("/", withAuth, async (req, res) => {
+  try {
+    const postData = await Post.destroy({
+      where: {
+        id: req.params.id,
+        userId: req.session.userId,
+      },
+    });
+    res.status(200).json(postData);
   } catch (err) {
     res.status(500).json(err);
   }
