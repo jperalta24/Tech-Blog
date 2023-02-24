@@ -1,0 +1,7 @@
+
+ {{#each comment}}
+      <div class="mb-3">
+        <p>{{this.text}}</p>
+        <small class="text-muted">Posted by {{this.username}} on {{moment this.createdAt format="MMMM Do YYYY, h:mm:ss a"}}</small>
+      </div>
+    {{/each}}

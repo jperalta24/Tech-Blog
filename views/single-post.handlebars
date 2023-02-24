@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{post.title}}</h5>
+    <p class="card-text">{{post.content}}</p>
+    <hr />
+    <h6 class="card-subtitle mb-2 text-muted">Comments</h6>
+    {{#each comment}}
+      <div class="mb-3">
+        <p>{{this.text}}</p>
+        <small class="text-muted">Posted by
+          {{this.username}}
+          on
+          {{moment this.createdAt format="MMMM Do YYYY, h:mm:ss a"}}</small>
+      </div>
+    {{/each}}
+    <hr />
+
+    {{#if loggedIn}}
+      <form>
+        <div class="form-group">
+          <label for="commentText">Add a comment:</label>
+          <textarea class="form-control" id="commentText" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    {{/if}}
+  </div>
+</div>

@@ -31,9 +31,11 @@ router.get("/", async (req, res) => {
 });
 
 // get a single post ('/post/:id')
-router.get("/posts/:id", async (req, res) => {
+router.get("/post/:id", async (req, res) => {
   try {
-    const postData = await Post.findByPk(req.params.id, {
+    const postData = await Post.findOne({
+      where: { id: req.params.id },
+      attributes: ["id", "content", "title"],
       include: [
         {
           model: Comment,
@@ -50,9 +52,9 @@ router.get("/posts/:id", async (req, res) => {
       ],
     });
     if (postData) {
-      const post = postData.map((post) => post.get({ plain: true }));
+      const post = postData.get({ plain: true });
       console.log(post);
-      res.render("singlePost", {
+      res.render("single-post", {
         post,
         loggedIn: req.session.loggedIn,
         username: req.session.username,

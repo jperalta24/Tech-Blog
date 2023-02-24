@@ -3,7 +3,7 @@ const { User, Post, Comment } = require("../models");
 const withAuth = require("../utils/auth");
 //All user posts ('/dashboard')
 
-router.get("/dashboard", withAuth, async (req, res) => {
+router.get("/", withAuth, async (req, res) => {
   try {
     // Fetch all posts for the logged-in user
     const postData = await Post.findAll({
@@ -15,7 +15,7 @@ router.get("/dashboard", withAuth, async (req, res) => {
     const posts = postData.map((post) => post.get({ plain: true }));
 
     // Render the dashboard template with the serialized data and session status
-    res.render("dashboard", { posts, loggedIn: true });
+    res.render("dashboard", { posts, loggedIn: req.session.loggedIn });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -23,7 +23,7 @@ router.get("/dashboard", withAuth, async (req, res) => {
 });
 
 // Get one post to edit ('dashboard/edit/:id')
-router.get("/dashboard/edit/:id", withAuth, async (req, res) => {
+router.get("/edit/:id", withAuth, async (req, res) => {
   try {
     // Fetch the post to be edited
     const postData = await Post.findOne({
@@ -48,13 +48,6 @@ router.get("/dashboard/edit/:id", withAuth, async (req, res) => {
   }
 });
 
-router.get("/new", withAuth, async (req, res) => {
-  try {
-    res.render("newPost", { username: req.session.username });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+
 
 module.exports = router;
