@@ -31,48 +31,38 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/:postId", withAuth, async (req, res) => {
+router.post('/:postId', withAuth, async (req, res) => {
   try {
-    console.log("Request Body: ", req.body);
-    console.log("Request Params: ", req.params);
-    
-    const post_Id = req.params.postId;
-    const user_Id = req.session.userId;
-    const content = req.body.content;
-
-    console.log("post_Id:", post_Id);
-    console.log("user_Id:", user_Id);
-    console.log("content:", content);
-
+    const postId = req.params.postId;
+    const userId = req.session.userId;
+    console.log(postId, userId);
     const newComment = await Comment.create({
-      content,
-      userId: user_Id, // use correct key
-      postId: post_Id, // use correct key
+      content: req.body.content,
+      user_id: userId, // Use 'user_Id' as defined in the Comment model
+      post_id: postId, // Use 'post_id' as defined in the Comment model
     });
 
-    console.log("newComment:", newComment);
-
-    res.status(200).json({ newComment, success: true });
+    res.status(200).json(newComment);
   } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
+    console.log(err); // Log the error
+    res.status(400).json(err);
   }
 });
 
 router.delete("/", withAuth, async (req, res) => {
-    try {
-      const commentData = await Comment.destroy({
-        where: { id: req.params.id },
+  try {
+    const commentData = await Comment.destroy({
+      where: { id: req.params.id },
+    });
+    if (!commentData) {
+      return res.status(404).json({
+        message: "No comment with this id is found",
       });
-      if (!commentData) {
-        return res.status(404).json({
-          message: "No comment with this id is found",
-        });
-      }
-      res.status(200).json({ commentData, success: true });
-    } catch (err) {
-      res.status(500).json(err);
     }
-  });
-  
+    res.status(200).json({ commentData, success: true });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

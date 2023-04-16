@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     const userData = await User.findByPk(req.session.userId);
     // Fetch all posts for the logged-in user
     const postData = await Post.findAll({
-      where: { id: req.session.userId },
+      where: { user_id: req.session.userId },
       include: [{ model: User, attributes: ["username"] }],
     });
 
