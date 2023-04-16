@@ -1,8 +1,21 @@
 <h2>Sign Up</h2>
-<form>
+<form id="signup-form">
     {{!-- add form labels --}}
-    <input type="email" name=''>
-    <input type="username" name=''>
-    <input type="password" name=''>
-    <button type="submit"></button>
+    <div class="form-group">
+                <label for="name-signup">name:</label>
+                <input class="form-input" type="text" id="name-signup" />
+            </div>
+            <div class="form-group">
+                <label for="email-signup">email:</label>
+                <input class="form-input" type="text" id="email-signup" />
+            </div>
+            <div class="form-group">
+                <label for="password-signup">password:</label>
+                <input class="form-input" type="password" id="password-signup" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">signup</button>
+            </div>
 </form>
+
+ <script src="signUp.js"></script>

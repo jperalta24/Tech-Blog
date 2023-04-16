@@ -3,11 +3,12 @@ const { User, Post, Comment } = require("../models");
 const withAuth = require("../utils/auth");
 //All user posts ('/dashboard')
 
-router.get("/", withAuth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
+    const userData = await User.findByPk(req.session.userId);
     // Fetch all posts for the logged-in user
     const postData = await Post.findAll({
-      where: { userId: req.session.userId },
+      where: { id: req.session.userId },
       include: [{ model: User, attributes: ["username"] }],
     });
 
@@ -15,7 +16,7 @@ router.get("/", withAuth, async (req, res) => {
     const posts = postData.map((post) => post.get({ plain: true }));
 
     // Render the dashboard template with the serialized data and session status
-    res.render("dashboard", { posts, loggedIn: req.session.loggedIn });
+    res.render("dashboard", { posts, loggedIn: req.session.loggedIn, username: userData.username });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

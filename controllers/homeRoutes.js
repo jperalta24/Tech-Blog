@@ -69,6 +69,7 @@ router.get("/post/:id", async (req, res) => {
 
 router.get("/login", async (req, res) => {
   try {
+    //redirects user to homepage if user is already logged in
     if (req.session.loggedIn) {
       res.redirect("/");
       return;
@@ -81,7 +82,11 @@ router.get("/login", async (req, res) => {
 
 router.get("/signup", async (req, res) => {
   try {
-    res.render("signup");
+    if (req.session.logged_in) {
+      res.redirect('/');
+      return;
+    }
+    res.render('signup');
   } catch (err) {
     res.status(500).json(err);
   }

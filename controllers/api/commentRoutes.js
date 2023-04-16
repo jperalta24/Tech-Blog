@@ -31,15 +31,30 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", withAuth, async (req, res) => {
-  const body = req.body;
+router.post("/:postId", withAuth, async (req, res) => {
   try {
+    console.log("Request Body: ", req.body);
+    console.log("Request Params: ", req.params);
+    
+    const post_Id = req.params.postId;
+    const user_Id = req.session.userId;
+    const content = req.body.content;
+
+    console.log("post_Id:", post_Id);
+    console.log("user_Id:", user_Id);
+    console.log("content:", content);
+
     const newComment = await Comment.create({
-      ...body,
-      userId: req.session.UserId,
+      content,
+      userId: user_Id, // use correct key
+      postId: post_Id, // use correct key
     });
+
+    console.log("newComment:", newComment);
+
     res.status(200).json({ newComment, success: true });
   } catch (err) {
+    console.error(err);
     res.status(500).json(err);
   }
 });

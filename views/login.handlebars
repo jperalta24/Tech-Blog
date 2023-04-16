@@ -1,7 +1,22 @@
-<h2>Login</h2>
-<form>
+<h2>Enter username to login</h2>
+<form id="login-form">
     {{!-- add form labels --}}
-    <input type="text" name=''>
-    <input type="password" name=''>
-    <button type="submit"></button>
+
+  <div class="form-group">
+                <label for="email-login">email:</label>
+                <input class="form-input" type="text" id="email-login" />
+            </div>
+            <div class="form-group">
+                <label for="password-login">password:</label>
+                <input class="form-input" type="password" id="password-login" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">login</button>
+            </div>
 </form>
+
+<div>
+    <a href="./signup">If you don't have an account, sign up here</a>
+</div>
+
+<script src="login.js"></script>
