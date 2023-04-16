@@ -25,7 +25,7 @@
 
 ## Installation
 bash
-git clone https://github.com/your-username/tech-blog.git
+git clone https://github.com/jperalta24/tech-blog.git
 Install dependencies:
 
 npm install
